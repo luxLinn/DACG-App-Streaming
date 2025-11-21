@@ -1,0 +1,58 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Clear Dist",
+      "type": "shell",
+      "command": "Remove-Item",
+      "args": [
+        "./target/*",
+        "-Force"
+      ]
+    },
+    {
+      "label": "Build Debug",
+      "type": "shell",
+      "command": "clang++",
+      "args": [
+        "./src/main.cpp",
+        "'-Wl,/SUBSYSTEM:WINDOWS'",
+        "-o",
+        "./target/DACG-App-Streaming-Debug.exe",
+        "-g",
+        "-O0",
+        "-luser32",
+      ],
+      "problemMatcher": {
+        "pattern": [
+            {
+              "regexp": "^(.+):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+              "file": 1,
+              "line": 2,
+              "column": 3,
+              "severity": 4,
+              "message": 5
+            }
+        ]
+      },
+    },
+    {
+      "label": "Run App",
+      "type": "shell",
+      "command": "./target/DACG-App-Streaming-Debug.exe"
+    },
+    {
+      "label": "BuildFullDebug",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Clear Dist",
+        "Build Debug",
+        "Run App"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
